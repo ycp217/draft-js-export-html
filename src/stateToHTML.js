@@ -154,7 +154,7 @@ class MarkupGenerator {
   inlineStyles: StyleMap;
   styleOrder: Array<string>;
 
-  constructor(contentState: ContentState, options: ?Options) {
+  constructor(contentState: ContentState, options: ?Options, injectCssOptions: any) {
     if (options == null) {
       options = {};
     }
@@ -166,6 +166,7 @@ class MarkupGenerator {
     );
     this.inlineStyles = inlineStyles;
     this.styleOrder = styleOrder;
+    this.injectCssOptions = injectCssOptions || {};
   }
 
   generate(): string {
@@ -250,7 +251,8 @@ class MarkupGenerator {
   writeStartTag(blockType) {
     let tags = getTags(blockType);
     for (let tag of tags) {
-      this.output.push(`<${tag}>`);
+      if (this.injectCssOptions[tag]) this.output.push(`<${tag} style="${this.injectCssOptions[tag]}">`)
+      else this.output.push(`<${tag}>`);
     }
   }
 
@@ -399,6 +401,6 @@ function encodeAttr(text: string): string {
     .split('"').join('&quot;');
 }
 
-export default function stateToHTML(content: ContentState, options: ?Options): string {
+export default function stateToHTML(content: ContentState, options: ?Options, injectCssOptions: any): string {
   return new MarkupGenerator(content, options).generate();
 }
