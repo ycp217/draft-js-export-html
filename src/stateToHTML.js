@@ -402,5 +402,5 @@ function encodeAttr(text: string): string {
 }
 
 export default function stateToHTML(content: ContentState, options: ?Options, injectCssOptions: any): string {
-  return new MarkupGenerator(content, options).generate();
+  return new MarkupGenerator(content, options, injectCssOptions).generate();
 }
